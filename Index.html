@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>efex</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-bw">
+  <div id="authGate" class="auth-gate">
+    <div class="auth-card">
+      <div class="auth-brand">efex</div>
+
+      <div class="mode-tabs">
+        <button id="tabModeLogin" class="mode-tab active" type="button" data-i18n="signInTab">Entrar</button>
+        <button id="tabModeSignup" class="mode-tab" type="button" data-i18n="signUpTab">Criar conta</button>
+      </div>
+
+      <div id="gateSavedAccountsWrap" class="hidden">
+        <span class="muted" data-i18n="savedAccountsLabel">Sessão recente</span>
+        <div id="gateSavedAccountsList" class="posts-stack"></div>
+      </div>
+
+      <div id="gateAuthForm" class="posts-stack">
+        <input id="gateHandleInput" type="text" placeholder="@arroba" />
+        <input id="gateNameInput" type="text" placeholder="Nome" class="hidden" />
+        <input id="gatePassInput" type="password" placeholder="Senha" />
+        <button id="btnGateSubmit" class="btn btn-primary" type="button" data-i18n="signInBtn">Entrar</button>
+        <button id="btnToggleForgotPass" class="link-btn muted" type="button" data-i18n="forgotPassBtn">Esqueci a senha</button>
+      </div>
+
+      <div id="gateResetBox" class="posts-stack hidden">
+        <strong data-i18n="resetPassTitle">Redefinir senha</strong>
+        <input id="resetHandleInput" type="text" placeholder="@arroba" />
+        <input id="resetNewPassInput" type="password" placeholder="Nova senha" />
+        <button id="btnGateResetConfirm" class="btn btn-primary" type="button" data-i18n="confirmResetBtn">Salvar nova senha</button>
+        <button id="btnBackToAuth" class="btn btn-secondary" type="button" data-i18n="backBtn">Voltar</button>
+      </div>
+
+      <div id="gateFeedback" class="feedback-text"></div>
+    </div>
+  </div>
+
+  <div id="appShell" class="app-shell hidden">
+    <header class="topbar">
+      <div class="top-actions">
+        <span class="brand-title">efex</span>
+        <span id="topUserHandle" class="user-pill">@usuario</span>
+      </div>
+      <div class="top-actions">
+        <button id="btnOpenAuth" class="btn btn-secondary btn-sm" type="button" data-i18n="accountsTitle">Conta</button>
+        <button id="btnOpenSupport" class="btn btn-secondary btn-sm" type="button" data-i18n="supportTitle">Suporte</button>
+        <button id="btnOpenSettings" class="btn btn-secondary btn-sm" type="button" data-i18n="settingsTitle">Configurações</button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section id="tab-feed" class="tab-view active">
+        <div class="section-header">
+          <h2 data-i18n="feedTitle">Feed</h2>
+          <div class="filter-group">
+            <button id="filterAll" class="pill-btn active" type="button" data-i18n="all">Todos</button>
+            <button id="filterFollowing" class="pill-btn" type="button" data-i18n="following">Seguindo</button>
+          </div>
+        </div>
+
+        <div class="search-profiles-box">
+          <input id="profileSearchInput" type="text" placeholder="Buscar perfis (@arroba ou nome)..." autocomplete="off" />
+          <div id="profileSearchResults" class="search-results-list hidden"></div>
+        </div>
+
+        <div class="composer-card">
+          <textarea id="postText" placeholder="O que está acontecendo?"></textarea>
+
+          <div id="postImagePreviewWrap" class="media-preview-box hidden">
+            <img id="postImagePreview" src="" alt="Preview" />
+            <button id="btnRemovePostImage" class="remove-media-btn" type="button">x</button>
+          </div>
+
+          <div id="postVideoPreviewWrap" class="media-preview-box hidden">
+            <video id="postVideoPreview" src="" controls playsinline></video>
+            <button id="btnRemovePostVideo" class="remove-media-btn" type="button">x</button>
+          </div>
+
+          <div class="composer-footer">
+            <div class="media-actions">
+              <label class="btn btn-secondary btn-sm" for="postImageInput" data-i18n="avatarBtn">Foto</label>
+              <input id="postImageInput" type="file" accept="image/*" class="hidden" />
+              <button id="btnPickPostVideo" class="btn btn-secondary btn-sm" type="button">Vídeo</button>
+              <input id="postVideoInput" type="file" accept="video/*" class="hidden" />
+            </div>
+            <button id="btnPublishPost" class="btn btn-primary btn-sm" type="button" data-i18n="publish">Publicar</button>
+          </div>
+        </div>
+
+        <div id="feedList" class="posts-stack"></div>
+      </section>
+
+      <section id="tab-posts" class="tab-view">
+        <div class="section-header">
+          <h2 data-i18n="allPosts">Publicações</h2>
+        </div>
+        <div id="postsTabList" class="posts-stack"></div>
+      </section>
+
+      <section id="tab-chat" class="tab-view">
+        <div class="section-header">
+          <h2 data-i18n="chatTitle">Chat</h2>
+          <button id="btnClearChat" class="btn btn-secondary btn-sm" type="button" data-i18n="cancel">Cancelar</button>
+        </div>
+
+        <div id="chatContactsBar" class="chat-contacts-bar"></div>
+
+        <div class="chat-box">
+          <div class="chat-header-bar">
+            <button id="btnOpenChatTargetProfile" class="link-btn" type="button"><strong>@efex</strong></button>
+            <span id="chatFeedback" class="feedback-text"></span>
+          </div>
+
+          <div id="chatMessagesList" class="chat-messages"></div>
+
+          <div id="chatImagePreviewWrap" class="media-preview-box hidden">
+            <img id="chatImagePreview" src="" alt="Chat preview" />
+            <button id="btnRemoveChatImage" class="remove-media-btn" type="button">x</button>
+          </div>
+
+          <div id="chatVideoPreviewWrap" class="media-preview-box hidden">
+            <video id="chatVideoPreview" src="" controls playsinline></video>
+            <button id="btnRemoveChatVideo" class="remove-media-btn" type="button">x</button>
+          </div>
+
+          <div class="chat-input-row">
+            <button id="btnPickChatImage" class="icon-btn" type="button" aria-label="Foto">+</button>
+            <input id="chatImageInput" type="file" accept="image/*" class="hidden" />
+            <button id="btnPickChatVideo" class="icon-btn" type="button" aria-label="Vídeo">▶</button>
+            <input id="chatVideoInput" type="file" accept="video/*" class="hidden" />
+            <input id="chatMessageInput" type="text" placeholder="Mensagem..." />
+            <button id="btnSendChat" class="btn btn-primary btn-sm" type="button">→</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-activity" class="tab-view">
+        <div class="section-header">
+          <h2 data-i18n="activityTitle">Atividade</h2>
+          <button id="btnClearActivity" class="btn btn-secondary btn-sm" type="button" data-i18n="cancel">Cancelar</button>
+        </div>
+        <div id="activityList" class="posts-stack"></div>
+      </section>
+
+      <section id="tab-profile" class="tab-view">
+        <div class="profile-card">
+          <div id="profileBanner" class="profile-banner"></div>
+          <div class="profile-body">
+            <div class="profile-top-row">
+              <img id="profileAvatar" class="profile-avatar" src="" alt="Avatar" />
+              <div class="top-actions">
+                <button id="btnToggleEditProfile" class="btn btn-secondary btn-sm" type="button" data-i18n="save">Editar</button>
+                <button id="btnSwitchAccount" class="btn btn-secondary btn-sm" type="button" data-i18n="accountsTitle">Conta</button>
+                <button id="btnLogout" class="btn btn-danger btn-sm" type="button">Sair</button>
+              </div>
+            </div>
+
+            <div>
+              <h2 id="profileDisplayName">Nome</h2>
+              <div id="profileHandle" class="muted">@usuario</div>
+              <p id="profileBio" class="post-body"></p>
+            </div>
+
+            <div class="profile-stats">
+              <span><strong id="statPosts">0</strong> <span data-i18n="postsStat">Posts</span></span>
+              <button id="btnOpenMyFollowers" class="stat-btn" type="button">
+                <strong id="statFollowers">0</strong> <span data-i18n="followersStat">Seguidores</span>
+              </button>
+              <button id="btnOpenMyFollowing" class="stat-btn" type="button">
+                <strong id="statFollowing">0</strong> <span data-i18n="followingStat">Seguindo</span>
+              </button>
+            </div>
+
+            <div id="editProfileBox" class="edit-profile-box hidden">
+              <input id="editNameInput" type="text" placeholder="Nome" />
+              <textarea id="editBioInput" placeholder="Bio"></textarea>
+              <div class="media-actions">
+                <label class="btn btn-secondary btn-sm" for="editAvatarInput" data-i18n="avatarBtn">Foto</label>
+                <input id="editAvatarInput" type="file" accept="image/*" class="hidden" />
+                <label class="btn btn-secondary btn-sm" for="editBannerInput" data-i18n="bannerBtn">Banner</label>
+                <input id="editBannerInput" type="file" accept="image/*" class="hidden" />
+              </div>
+              <div class="top-actions">
+                <button id="btnSaveProfile" class="btn btn-primary btn-sm" type="button" data-i18n="save">Salvar</button>
+                <button id="btnCancelEditProfile" class="btn btn-secondary btn-sm" type="button" data-i18n="cancel">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h2 data-i18n="myPosts">Meus Posts</h2>
+        </div>
+        <div id="myPostsList" class="posts-stack"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-tab="feed" type="button">
+        <span data-i18n="feedTitle">Feed</span>
+      </button>
+      <button class="nav-btn" data-tab="posts" type="button">
+        <span data-i18n="allPosts">Publicações</span>
+      </button>
+      <button class="nav-btn" data-tab="chat" type="button">
+        <span data-i18n="chatTitle">Chat</span>
+      </button>
+      <button class="nav-btn" data-tab="activity" type="button">
+        <span data-i18n="activityTitle">Atividade</span>
+      </button>
+      <button class="nav-btn" data-tab="profile" type="button">
+        <span data-i18n="accountsTitle">Conta</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Modal Curtidas -->
+  <div id="likesModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <strong data-i18n="likesListTitle">Curtidas</strong>
+        <button id="btnCloseLikesModal" class="icon-btn" type="button">x</button>
+      </div>
+      <div id="likesUsersList" class="posts-stack"></div>
+    </div>
+  </div>
+
+  <!-- Modal Perfil de Usuário -->
+  <div id="userProfileModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <strong id="viewProfileTitle">@usuario</strong>
+        <button id="btnCloseUserProfile" class="icon-btn" type="button">x</button>
+      </div>
+
+      <div id="viewProfileBanner" class="profile-banner"></div>
+      <img id="viewProfileAvatar" class="profile-avatar" src="" alt="Avatar" />
+      <strong id="viewProfileName">Nome</strong>
+      <div id="viewProfileHandle" class="muted">@usuario</div>
+      <p id="viewProfileBio" class="post-body"></p>
+
+      <div class="profile-stats">
+        <span><strong id="viewStatPosts">0</strong> <span data-i18n="postsStat">Posts</span></span>
+        <button id="btnViewTabFollowers" class="stat-btn" type="button">
+          <strong id="viewStatFollowers">0</strong> <span data-i18n="followersStat">Seguidores</span>
+        </button>
+        <button id="btnViewTabFollowing" class="stat-btn" type="button">
+          <strong id="viewStatFollowing">0</strong> <span data-i18n="followingStat">Seguindo</span>
+        </button>
+      </div>
+
+      <div class="top-actions">
+        <button id="btnViewProfileFollow" class="btn btn-primary btn-sm" type="button">Seguir</button>
+        <button id="btnViewProfileMessage" class="btn btn-secondary btn-sm" type="button">Mensagem</button>
+      </div>
+
+      <div class="option-grid">
+        <button id="btnShowFollowersList" class="pill-btn active" type="button" data-i18n="followersStat">Seguidores</button>
+        <button id="btnShowFollowingList" class="pill-btn" type="button" data-i18n="followingStat">Seguindo</button>
+      </div>
+      <div id="followRelationsList" class="posts-stack"></div>
+      <div id="viewUserPostsList" class="posts-stack"></div>
+    </div>
+  </div>
+
+  <!-- Modal Conta -->
+  <div id="authModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <strong data-i18n="accountsTitle">Conta</strong>
+        <button id="btnCloseAuth" class="icon-btn" type="button">x</button>
+      </div>
+      <div id="savedAccountsList" class="posts-stack"></div>
+      <input id="authHandleInput" type="text" placeholder="@arroba" />
+      <input id="authNameInput" type="text" placeholder="Nome" />
+      <input id="authPassInput" type="password" placeholder="Senha" />
+      <button id="btnAuthSubmit" class="btn btn-primary" type="button" data-i18n="continueBtn">Continuar</button>
+      <div id="authFeedback" class="feedback-text"></div>
+    </div>
+  </div>
+
+  <!-- Modal Configurações -->
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <strong data-i18n="settingsTitle">Configurações</strong>
+        <button id="btnCloseSettings" class="icon-btn" type="button">x</button>
+      </div>
+
+      <div>
+        <div class="muted" data-i18n="themeLabel">Tema</div>
+        <div class="option-grid">
+          <button class="pill-btn js-theme-opt" data-theme="bw" type="button">BW</button>
+          <button class="pill-btn js-theme-opt" data-theme="wine" type="button">Wine</button>
+          <button class="pill-btn js-theme-opt" data-theme="light" type="button">Light</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="muted" data-i18n="langLabel">Idioma</div>
+        <div class="option-grid">
+          <button class="pill-btn js-lang-opt" data-lang="pt" type="button">PT</button>
+          <button class="pill-btn js-lang-opt" data-lang="en" type="button">EN</button>
+          <button class="pill-btn js-lang-opt" data-lang="es" type="button">ES</button>
+        </div>
+      </div>
+
+      <div class="posts-stack">
+        <strong data-i18n="changePassTitle">Alterar senha</strong>
+        <input id="curPassInput" type="password" placeholder="Senha atual" />
+        <input id="newPassInput" type="password" placeholder="Nova senha" />
+        <button id="btnChangePass" class="btn btn-primary btn-sm" type="button" data-i18n="savePassBtn">Atualizar senha</button>
+      </div>
+
+      <button id="btnResetApp" class="btn btn-danger btn-sm" type="button" data-i18n="resetData">Resetar dados locais</button>
+      <div id="settingsFeedback" class="feedback-text"></div>
+    </div>
+  </div>
+
+  <!-- Modal Suporte -->
+  <div id="supportModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <strong data-i18n="supportTitle">Suporte</strong>
+        <button id="btnCloseSupport" class="icon-btn" type="button">x</button>
+      </div>
+
+      <div class="option-grid">
+        <button class="pill-btn js-sup-topic active" data-topic="account" type="button" data-i18n="topicAccount">Conta</button>
+        <button class="pill-btn js-sup-topic" data-topic="chat" type="button" data-i18n="topicChat">Chat</button>
+        <button class="pill-btn js-sup-topic" data-topic="bug" type="button" data-i18n="topicBug">Bug</button>
+      </div>
+
+      <input id="supportEmailInput" type="email" placeholder="Seu e-mail (opcional)" />
+      <textarea id="supportMsgInput" placeholder="Descreva o que aconteceu..."></textarea>
+
+      <div class="top-actions">
+        <button id="btnSaveTicketLocal" class="btn btn-primary btn-sm" type="button" data-i18n="saveTicketBtn">Registrar</button>
+        <button id="btnSendMailSupport" class="btn btn-secondary btn-sm" type="button" data-i18n="sendEmailBtn">E-mail</button>
+        <button id="btnCopyDiag" class="btn btn-secondary btn-sm" type="button" data-i18n="copyDiag">Copiar</button>
+      </div>
+
+      <div id="supportFeedback" class="feedback-text"></div>
+      <div class="muted" data-i18n="ticketHistoryLabel">Chamados salvos</div>
+      <div id="supportTicketsList" class="posts-stack"></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (para sincronizar online como site) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
